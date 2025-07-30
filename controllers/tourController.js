@@ -1,6 +1,6 @@
 const Tour = require("../models/tourModel.js");
 
-// this checkID middleware is no longer needed, it was just for studying purposes
+/* this checkID middleware is no longer needed, it was just for studying purposes
 //.
 // exports.checkID = (req, res, next, val) => {
 //   console.log(`Tour ID is: ${val}`);
@@ -22,6 +22,7 @@ const Tour = require("../models/tourModel.js");
 //   }
 //   next();
 // };
+*/
 
 exports.getAllTours = (req, res) => {
   res.status(200).json({
@@ -45,13 +46,21 @@ exports.getTourById = (req, res) => {
   // });
 };
 
-exports.createTour = (req, res) => {
-  res.status(201).json({
-    status: "success",
-    // data: {
-    //   tour: newTour,
-    // },
-  });
+exports.createTour = async (req, res) => {
+  try{
+    const newTour = await Tour.create(req.body);
+    res.status(201).json({
+      status: "success",
+      data: {
+        tour: newTour
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    })
+  }
 };
 
 exports.updateTour = (req, res) => {
