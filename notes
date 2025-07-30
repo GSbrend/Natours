@@ -1,0 +1,18 @@
+MVC (module, view, controller) architecture in a nutshell
+ 
+ Module layer: application's data and business logic
+    
+ Controller layer: application's request, interact with modules and send back responses
+
+ View layer: only necessary if we have a grafical interface, in other words, a server-side rendered website. It's basically the template shown
+
+Application logic: 
+ -Code focused on the app's implementation, which makes it work
+ -Concerned about managing requests and responses
+ -A bridge for module-view layers
+
+Business logic:
+ -Code that is focused on solving business problem we set out to solve
+ -Focused on the business needs itself.
+
+Fat models/thin controllers philosofy: Put all logic in the models and keep controllers as simple as possible
