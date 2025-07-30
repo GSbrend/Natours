@@ -1,8 +1,8 @@
 const express = require('express');
-const userController = require('../controllers/userController');
-const router = express.Router();
+const userController = require('../controllers/userController'); // my own module, created to manage the methods for users
+const router = express.Router(); // express module to manage routes more easily
 
-router.param('id', userController.checkUserId);
+router.param('id', userController.checkUserId); // call back used as "filter" for users' id
 
 router
   .route('/')

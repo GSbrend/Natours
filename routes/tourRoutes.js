@@ -1,6 +1,6 @@
 const express = require('express');
-const tourController = require('../controllers/tourController');
-const router = express.Router();
+const tourController = require('../controllers/tourController'); // my own module, created to manage the methods for users
+const router = express.Router(); // express module to manage routes more easily
 
 // as this middleware is inside the tourRoutes file, it will only apply to routes defined in this file
 router.param('id', tourController.checkID);
