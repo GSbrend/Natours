@@ -19,10 +19,11 @@ Fat models/thin controllers philosofy: Put all logic in the models and keep cont
 
 ============= async await =============
 
-const variable = async (callback) {
+const variable = async (callback) => {
     try {
-        const variable = await
+        const variable = await function
     } catch (err) {
         error handling
     }
 }
+
