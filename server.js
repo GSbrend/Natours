@@ -5,16 +5,11 @@ const app = require("./app");
 
 dotenv.config({ path: "./config.env" });
 
-const DB = process.env.DATABASE.replace("<password>", process.env.DB_PASSWORD);
+const DB = process.env.DATABASE.replace("<db_password>", process.env.DB_PASSWORD);
 
 mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
-  .then((con) => console.log("DB connection successfull"));
+  .connect(DB)
+  .then(() => {console.log("DB connection successfull")});
 
 // create a schema to create a module
 // the schema is used to define the structure of the documents within a collection
