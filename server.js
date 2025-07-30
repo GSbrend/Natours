@@ -5,11 +5,14 @@ const app = require("./app");
 
 dotenv.config({ path: "./config.env" });
 
-const DB = process.env.DATABASE.replace("<db_password>", process.env.DB_PASSWORD);
+const DB = process.env.DATABASE.replace(
+  "<db_password>",
+  process.env.DB_PASSWORD
+);
 
-mongoose
-  .connect(DB)
-  .then(() => {console.log("DB connection successfull")});
+mongoose.connect(DB).then(() => {
+  console.log("DB connection successfull");
+});
 
 // create a schema to create a module
 // the schema is used to define the structure of the documents within a collection
@@ -34,7 +37,7 @@ const tourSchema = new mongoose.Schema({
 });
 
 // creating a model from the schema
-const Tour = mongoose.model("Tour", tourSchema);
+const Tours = mongoose.model("Tour", tourSchema);
 
 //fist code interaction with mongoose
 const testTour = new Tour({
