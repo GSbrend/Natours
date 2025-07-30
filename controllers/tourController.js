@@ -47,17 +47,16 @@ exports.getTourById = async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.id); // finds the data matching the id parameter on the URL
     // simplification of 'Tour.findOne({ _id: req.params.id })
-
     res.status(200).json({
       status: "sucess",
       data: {
-        tour,
+        tour
       },
     });
   } catch (err) {
     res.status(400).json({
       status: "fail",
-      message: "oh no!",
+      message: err
     });
   }
 };
