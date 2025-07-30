@@ -8,7 +8,7 @@ const router = express.Router(); // express module to manage routes more easily
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.checkBody, tourController.createTour);
+  .post(tourController.createTour);
 
 router
   .route('/:id')
