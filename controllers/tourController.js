@@ -1,16 +1,17 @@
-const fs = require("fs");
 const Tour = require("../models/tourModel.js");
 
-exports.checkID = (req, res, next, val) => {
-  console.log(`Tour ID is: ${val}`);
-  if (!req.params.id * 1 > toursData.length) {
-    return res.status(404).json({
-      status: "fail",
-      message: "id not found",
-    });
-  }
-  next();
-};
+// this checkID middleware is no longer needed, it was just for studying purposes
+//.
+// exports.checkID = (req, res, next, val) => {
+//   console.log(`Tour ID is: ${val}`);
+//   if (!req.params.id * 1 > toursData.length) {
+//     return res.status(404).json({
+//       status: "fail",
+//       message: "id not found",
+//     });
+//   }
+//   next();
+// };
 
 exports.checkBody = (req, res, next) => {
   if (!req.body.name || !req.body.price) {
