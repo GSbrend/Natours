@@ -1,4 +1,4 @@
-MVC (module, view, controller) architecture in a nutshell
+=============MVC (module, view, controller) architecture in a nutshell=============
  
  Module layer: application's data and business logic
     
@@ -16,3 +16,13 @@ Business logic:
  -Focused on the business needs itself.
 
 Fat models/thin controllers philosofy: Put all logic in the models and keep controllers as simple as possible
+
+============= async await =============
+
+const variable = async (callback) {
+    try {
+        const variable = await
+    } catch (err) {
+        error handling
+    }
+}
