@@ -40,7 +40,7 @@ const tourSchema = new mongoose.Schema({
 const Tour = mongoose.model("Tour", tourSchema);
 
 //fist code interaction with mongoose
-const testTour = new Tour({
+const 'test'Tour = new Tour({
   name: "hogwarts",
   rating: 5.0,
   price: 530,
