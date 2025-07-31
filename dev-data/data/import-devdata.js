@@ -30,6 +30,7 @@ const importData = async () => {
   process.exit();
 };
 
+//delete data from db
 const deleteData = async () => {
     try {
         await Tour.deleteMany();
