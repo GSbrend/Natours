@@ -29,4 +29,19 @@ const importData = async () => {
   }
 };
 
+const deleteData = async () => {
+    try {
+        await Tour.deleteMany();
+        console.log('data deleted');
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+if (process.argv[2] === '--import') {
+    importData();
+} else if (process.argv[2] === '--delete') {
+    deleteData();
+}
+
 console.log(process.argv);
