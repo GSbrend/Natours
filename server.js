@@ -1,9 +1,9 @@
 // isn't express? so be my guest!
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" });
+const mongoose = require("mongoose");
 const app = require("./app");
 
-dotenv.config({ path: "./config.env" });
 
 const DB = process.env.DATABASE.replace(
   "<db_password>",
