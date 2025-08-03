@@ -32,7 +32,7 @@ exports.getAllTours = async (req, res) => {
 
     const queryObj = {...req.query} //take the field out of the object and create a new object, so we don't manipulate the original 
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach(el => delete queryObj[el]); //don't save a new array
+    excludedFields.forEach(el => delete queryObj[el]); // forEach doesn't save a new array
 
 // 2) ADVANCED FILTERING
 
@@ -72,6 +72,7 @@ exports.getAllTours = async (req, res) => {
       if (skip>=numTours) throw new Error('This page does not exist!');
     }
 // EXECUTE THE QUERY
+
     const tours = await query;
 
     res.status(200).json({
