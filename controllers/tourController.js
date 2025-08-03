@@ -41,7 +41,7 @@ exports.getAllTours = async (req, res) => {
       let queryStr = JSON.stringify(queryObj);
       queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
-      const query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
+      let query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
       // first way
 
     // const query = Tour.find()
@@ -49,6 +49,14 @@ exports.getAllTours = async (req, res) => {
     // .equals(5)
     // .where('difficulty')
     // .equals('easy');
+
+// 3) SORTING
+      if(req.query.sort) {
+        const srotBy = req.query.sort.split(',').join(' ');
+        query = query.sort(srotBy);
+      } else {
+        query = query.sort('-createdAt');
+      }
 
 // EXECUTE THE QUERY
       const tours = await query;
