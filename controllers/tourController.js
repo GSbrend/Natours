@@ -27,9 +27,6 @@ const Tour = require("../models/tourModel.js");
 
 exports.getAllTours = async (req, res) => {
   try {
-//  const tours = await Tour.find(); //finds all data in that collection
-
-
 // BUILDING THE QUERY
 // 1) FILTERING
 
@@ -38,19 +35,14 @@ exports.getAllTours = async (req, res) => {
     excludedFields.forEach(el => delete queryObj[el]); //don't save a new array
 
 // 2) ADVANCED FILTERING
+
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
     let query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
-    // first way
-
-  // const query = Tour.find()
-  // .where('duration')
-  // .equals(5)
-  // .where('difficulty')
-  // .equals('easy');
 
 // 3) SORTING
+
     if(req.query.sort) {
       const srotBy = req.query.sort.split(',').join(' ');
       query = query.sort(srotBy);
@@ -59,6 +51,7 @@ exports.getAllTours = async (req, res) => {
     }
 
 // 4/ FIELD LIMITING
+
     if(req.query.fields) {
       const fields = req.query.fields.split(',').join(' ');
       query = query.select(fields);
@@ -67,6 +60,7 @@ exports.getAllTours = async (req, res) => {
     }
 
 // 5) PAGINATION
+
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 100;
     const skip = (page -1) * limit;
