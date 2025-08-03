@@ -33,26 +33,26 @@ const Tour = mongoose.model("Tour", tourSchema);
 
 // is the function made to access the tour collection in mongoDB
 
-===========================================
+============= =============
 
 Tour.find();
 
 // is the method that finds the data in the collection (without parameters)
 
-===========================================
+============= =============
 
 Tour.find(req.query);
 
 // is the easiest filtering, getting the data that matches the parameters in the query, like "?difficulty=easy&duration=5", but the problem is that other parameters might be in the query, like "sort" or "page" or "limit", for example, and we don't want those.
 
-===========================================
+============= =============
 
 const queryObj = {...req.query}
 Tour.find(queryObj);
 
 // the "{...req.query}" is a way of creating a hard copy of the query without interacting with it actually
 
-===========================================
+============= =============
 
 const excludedFields = ['any fields that you wanna exclude from the filtering']
 excludedFields.forEach(el => delete queryObj[el]);

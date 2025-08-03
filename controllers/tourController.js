@@ -31,14 +31,17 @@ exports.getAllTours = async (req, res) => {
 
 
 // BUILDING THE QUERY
+// 1) FILTERING
+
       const queryObj = {...req.query} //take the field out of the object and create a new object, so we don't manipulate the original 
       const excludedFields = ['page', 'sort', 'limit', 'fields'];
       excludedFields.forEach(el => delete queryObj[el]); //don't save a new array
 
-      console.log(req.query, queryObj); //shows the query in the log
+// 2) ADVANCED FILTERING
+      let queryStr = JSON.stringify(queryObj);
+      queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
-      const query = Tour.find(queryObj); //finds queried data in the collection (in the easiest way)
-
+      const query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
       // first way
 
     // const query = Tour.find()
@@ -48,7 +51,7 @@ exports.getAllTours = async (req, res) => {
     // .equals('easy');
 
 // EXECUTE THE QUERY
-      const tours = query;
+      const tours = await query;
 
     res.status(200).json({
       status: "success",
@@ -60,7 +63,7 @@ exports.getAllTours = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: "fail",
-      message: "oh no!",
+      message: err,
     });
   }
 };
