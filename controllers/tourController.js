@@ -1,29 +1,6 @@
 const Tour = require("../models/tourModel.js"); //imports tour model
 const APIFeatures = require('../Utils/apiFeatures.js'); //imports apifeatures
 
-/* this checkID middleware is no longer needed, it was just for studying purposes
-//.
-// exports.checkID = (req, res, next, val) => {
-//   console.log(`Tour ID is: ${val}`);
-//   if (!req.params.id * 1 > toursData.length) {
-//     return res.status(404).json({
-//       status: "fail",
-//       message: "id not found",
-//     });
-//   }
-//   next();
-// };
-
-// exports.checkBody = (req, res, next) => {
-//   if (!req.body.name || !req.body.price) {
-//     return res.status(400).json({
-//       status: "fail",
-//       message: "Missing name or price",
-//     });
-//   }
-//   next();
-// };
-*/
 exports.aliasTopTours = async (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = 'price,-ratingsAverage';
@@ -124,7 +101,7 @@ exports.deleteTour = async (req, res) => {
     res.status(404).json({
       status:'fail',
       message:'error'
-    })
+    });
   }
 };
 
@@ -158,11 +135,59 @@ exports.getTourStats = async (req, res) => {
       data: {
         stats
       }
-    })
+    });
   } catch (err) {
         res.status(404).json({
       status:'fail',
       message:'error'
-    })
+    });
+  }
+}
+
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1; //converts to string
+    const plan = await Tour.aggregate([
+      {
+        $unwind: '$startDates' //separates all the tours with the same details by their starting dates, and rebuild them again as if it was one tour document for each date
+      },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {$month: '$startDates'}, //grouping by the month according to the startDates field
+          numTourStarts: {$sum: 1},
+          tour: {$push: '$name'} //create an array with the names
+        }
+      },
+      {
+        $sort: {numTourStarts: -1}
+      },
+      {
+        $addFields: {month: '$_id'}
+      },
+      {
+        $project: {
+          _id: 0
+        }
+      }
+    ]);
+      res.status(200).json({
+      status: 'sucess',
+      data: {
+        plan
+      }
+    });
+  } catch (err) {
+      res.status(404).json({
+      status:'fail',
+      message:'error'
+    });
   }
 }
