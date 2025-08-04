@@ -83,53 +83,7 @@ class APIFeatures {
 
 exports.getAllTours = async (req, res) => {
   try {
-    /*
-// BUILDING THE QUERY
-// // 1) FILTERING
-
-//     const queryObj = {...req.query} //take the field out of the object and create a new object, so we don't manipulate the original 
-//     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-//     excludedFields.forEach(el => delete queryObj[el]); // forEach doesn't save a new array
-
-// // 2) ADVANCED FILTERING
-
-//     let queryStr = JSON.stringify(queryObj);
-//     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-
-//     let query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
-
-// 3) SORTING
-
-    // if(req.query.sort) {
-    //   const srotBy = req.query.sort.split(',').join(' ');
-    //   query = query.sort(srotBy);
-    // } else {
-    //   query = query.sort('-_id');
-    // }
-
-// 4/ FIELD LIMITING
-
-    // if(req.query.fields) {
-    //   const fields = req.query.fields.split(',').join(' ');
-    //   query = query.select(fields);
-    // } else {
-    //   query = query.select('-__v')
-    // }
-
-// 5) paginate
-
-    // const page = req.query.page * 1 || 1;
-    // const limit = req.query.limit * 1 || 100;
-    // const skip = (page -1) * limit;
-
-    // query = query.skip(skip).limit(limit);
-
-    // if (req.query.page) {
-    //   const numTours = await Tour.countDocuments();
-    //   if (skip>=numTours) throw new Error('This page does not exist!');
-    // }
-    */
-// EXECUTE THE QUERY
+    // EXECUTE THE QUERY
     const features = new APIFeatures(Tour.find(), req.query)
     .filter()
     .sort()
