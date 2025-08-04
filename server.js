@@ -1,4 +1,3 @@
-// isn't express? so be my guest!
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 const mongoose = require("mongoose");

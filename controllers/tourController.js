@@ -10,7 +10,7 @@ exports.aliasTopTours = async (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    // EXECUTE THE QUERY
+    
     const features = new APIFeatures(Tour.find(), req.query)
     .filter()
     .sort()
@@ -85,7 +85,7 @@ exports.updateTour = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       status: "fail",
-      message: "oh no!",
+      message: err
     });
   }
 };
@@ -100,7 +100,7 @@ exports.deleteTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status:'fail',
-      message:'error'
+      message: err
     });
   }
 };
@@ -139,7 +139,7 @@ exports.getTourStats = async (req, res) => {
   } catch (err) {
         res.status(404).json({
       status:'fail',
-      message:'error'
+      message: err
     });
   }
 }
@@ -187,7 +187,7 @@ exports.getMonthlyPlan = async (req, res) => {
   } catch (err) {
       res.status(404).json({
       status:'fail',
-      message:'error'
+      message: err
     });
   }
 }
