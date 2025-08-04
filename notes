@@ -19,7 +19,7 @@ Fat models/thin controllers philosofy: Put all logic in the models and keep cont
 
 ============= async await =============
 
-const variable = async (callback) => {
+const variable = async (parameters) => {
     try {
         const variable = await function
     } catch (err) {
@@ -59,84 +59,83 @@ excludedFields.forEach(el => delete queryObj[el]);
 
 // const excludedFields = [] --- specifies what fields must be excluded from the query
 
-   excludedFields.forEach(...) --- deletes all the elements in excludedFields (the array created) from the queryObj (a copy from the original query). This way we filter without changing the original query.
+// excludedFields.forEach(...) --- deletes all the elements in excludedFields (the array created) from the queryObj (a copy from the original query). This way we filter without changing the original query.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 API STUFF
 
-// BUILDING THE QUERY
-// // 1) FILTERING
+BUILDING THE QUERY
+// 1) FILTERING
 
-//     const queryObj = {...req.query} //take the field out of the object and create a new object, so we don't manipulate the original 
-//     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-//     excludedFields.forEach(el => delete queryObj[el]); // forEach doesn't save a new array
+    const queryObj = {...req.query} //take the field out of the object and create a new object, so we don't manipulate the original 
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(el => delete queryObj[el]); // forEach doesn't save a new array
 
-// // 2) ADVANCED FILTERING
+// 2) ADVANCED FILTERING
 
-//     let queryStr = JSON.stringify(queryObj);
-//     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
 
-//     let query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
+    let query = Tour.find(JSON.parse(queryStr)); //finds queried data in the collection (in the easiest way)
 
 // 3) SORTING
 
-    // if(req.query.sort) {
-    //   const srotBy = req.query.sort.split(',').join(' ');
-    //   query = query.sort(srotBy);
-    // } else {
-    //   query = query.sort('-_id');
-    // }
+    if(req.query.sort) {
+      const srotBy = req.query.sort.split(',').join(' ');
+      query = query.sort(srotBy);
+    } else {
+      query = query.sort('-_id');
+    }
 
 // 4/ FIELD LIMITING
 
-    // if(req.query.fields) {
-    //   const fields = req.query.fields.split(',').join(' ');
-    //   query = query.select(fields);
-    // } else {
-    //   query = query.select('-__v')
-    // }
+    if(req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v')
+    }
 
 // 5) paginate
 
-    // const page = req.query.page * 1 || 1;
-    // const limit = req.query.limit * 1 || 100;
-    // const skip = (page -1) * limit;
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    const skip = (page -1) * limit;
 
-    // query = query.skip(skip).limit(limit);
+    query = query.skip(skip).limit(limit);
 
-    // if (req.query.page) {
-    //   const numTours = await Tour.countDocuments();
-    //   if (skip>=numTours) throw new Error('This page does not exist!');
-    // }
-    */
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip>=numTours) throw new Error('This page does not exist!');
+    }
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !**************************************************!
 
-/* this checkID middleware is no longer needed, it was just for studying purposes
-//.
-// exports.checkID = (req, res, next, val) => {
-//   console.log(`Tour ID is: ${val}`);
-//   if (!req.params.id * 1 > toursData.length) {
-//     return res.status(404).json({
-//       status: "fail",
-//       message: "id not found",
-//     });
-//   }
-//   next();
-// };
+//  this checkID middleware is no longer needed, it was just for studying purposes
+.
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour ID is: ${val}`);
+  if (!req.params.id * 1 > toursData.length) {
+    return res.status(404).json({
+      status: "fail",
+      message: "id not found",
+    });
+  }
+  next();
+};
 
-// exports.checkBody = (req, res, next) => {
-//   if (!req.body.name || !req.body.price) {
-//     return res.status(400).json({
-//       status: "fail",
-//       message: "Missing name or price",
-//     });
-//   }
-//   next();
-// };
-*/
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Missing name or price",
+    });
+  }
+  next();
+};
+
 
 !************************************************!
