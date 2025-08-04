@@ -1,7 +1,7 @@
 // create a schema to create a module
 // the schema is used to define the structure of the documents within a collection
 const mongoose = require("mongoose");
-const { stringify } = require("querystring");
+const slugify = require('slugify');
 const tourSchema = new mongoose.Schema({
   // basic way to define a schema
   //name: String,
@@ -12,6 +12,7 @@ const tourSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  slug: String,
   duration: {
     type: Number,
     required: [true, "A tour must have a duration"],
@@ -57,7 +58,25 @@ const tourSchema = new mongoose.Schema({
     select: false
   },
   startDates: [Date]
+},/* virtual properties */ {
+  toJSON: { virtuals: true},
+  toObject: { virtuals: true}
 });
+
+tourSchema.virtual('durationweeks').get(function() {
+  return this.duration / 7;
+});
+//document middleware: runs before the .save() and .create()
+tourSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, {lower: true});
+  next();
+});
+
+tourSchema.post('save', function(doc, next){
+  console.log(doc);
+  next();
+});
+
 // creating a model from the schema
 const Tour = mongoose.model("Tour", tourSchema);
 
