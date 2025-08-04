@@ -130,9 +130,9 @@ exports.deleteTour = async (req, res) => {
 
 exports.getTourStats = async (req, res) => {
   try {
-    const stats = await Tour.aggregate([
+    const stats = await Tour.aggregate([ //it must be inside an array
       {
-        $match: {ratingsAverage: {$gte: 3}} //matches all the tours above 4.5 rating
+        $match: {ratingsAverage: {$gte: 3}} //matches all the tours above 3 rating
       },
       {
         $group: { //aggregates all the specified data
