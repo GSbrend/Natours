@@ -72,10 +72,10 @@ tourSchema.pre('save', function(next) {
   next();
 });
 
-tourSchema.post('save', function(doc, next){
-  console.log(doc);
-  next();
-});
+// tourSchema.post('save', function(doc, next){
+//   console.log(doc);
+//   next();
+// });
 
 // creating a model from the schema
 const Tour = mongoose.model("Tour", tourSchema);
