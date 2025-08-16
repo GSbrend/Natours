@@ -15,10 +15,10 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlenght: [40 , 'A tour must have less or equal than 40 characters'], // str validators
-      minlenght: [10 , 'A tour must have more or equal than 40 characters'], // str validators
+      minlenght: [10 , 'A tour must have more or equal than 10 characters'], // str validators
       validate: {
-          validator: function(value) {
-          return validator.isAlpha(value,split(' ').join(''));  
+        validator: function(val) {
+         return validator.isAlpha(val.replace(/ /g, ''));
         },
         message: 'Tour name must only contain characters.'
       }
@@ -54,17 +54,19 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please provide a price"],
     },
-    priceDiscount: Number,
-    summary: {
-      type: String,
-      trim: true, //cuts off all the white space at the beggining and ending of the input
-        validate: {
-          validator: function(val) {
-            // 'this' only gives access to create a NEW doc
-            return val < this.price;
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function(val) {
+          // 'this' only gives access to create a NEW doc
+          return val < this.price;
         },
         message: 'Discount price ({VALUE}) should be below the regular price'
       }
+    },
+    summary: {
+      type: String,
+      trim: true, //cuts off all the white space at the beggining and ending of the input
     },
     desription: {
       type: String,
