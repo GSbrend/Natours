@@ -1,6 +1,7 @@
 // create a schema to create a module
 // the schema is used to define the structure of the documents within a collection
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const slugify = require('slugify');
 const validator = require('validator');
 const tourSchema = new mongoose.Schema({
@@ -86,18 +87,113 @@ const tourSchema = new mongoose.Schema({
   toJSON: { virtuals: true},
   toObject: { virtuals: true}
 });
+=======
+const slugify = require("slugify");
+const util = require('util');
+const tourSchema = new mongoose.Schema(
+  {
+    // basic way to define a schema
+    //name: String,
+    // schema type options
+    name: {
+      type: String,
+      required: [true, "Please provide a name"],
+      unique: true,
+      trim: true,
+    },
+    slug: String,
+    duration: {
+      type: Number,
+      required: [true, "A tour must have a duration"],
+    },
+    maxGroupSize: {
+      type: Number,
+      required: [true, "A tour must have a group size"],
+    },
+    difficulty: {
+      type: String,
+      required: [true, "A tour must have a difficulty"],
+    },
+    ratingsAverage: {
+      type: Number,
+      default: 0,
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
+    price: {
+      type: Number,
+      required: [true, "Please provide a price"],
+    },
+    priceDiscount: Number,
+    summary: {
+      type: String,
+      trim: true, //cuts off all the white space at the beggining and ending of the input
+    },
+    desription: {
+      type: String,
+      trim: true,
+    },
+    imageCover: {
+      type: String,
+      trim: true,
+      required: [true, "A tour must have a cover image"],
+    },
+    images: [String],
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      select: false,
+    },
+    startDates: [Date],
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  /* virtual properties */ {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+>>>>>>> 992763897a793ef0246f5c3f3f0568e025c9927e
 
-tourSchema.virtual('durationweeks').get(function() {
+tourSchema.virtual("durationweeks").get(function () {
   return this.duration / 7;
 });
+
+// MONGOOSE MIDDLEWARES
+
 //document middleware: runs before the .save() and .create()
-tourSchema.pre('save', function(next) {
-  this.slug = slugify(this.name, {lower: true});
+tourSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-tourSchema.post('save', function(doc, next){
-  console.log(doc);
+// QUERY MIDDLEWARE
+// middleware that runs before any query is found (a pre-find hook)
+tourSchema.pre(
+  /^find/,
+  /* regular expression to match with any query proprety that start with 'find' */ function (
+    next
+  ) {
+    this.find({ secretTour: { $ne: true } });
+    this.start = Date.now(); //shows the time when it started to run
+    next();
+  }
+);
+
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`query took ${Date.now() - this.start} milliseconds`); //shows the time when it loaded - the time when it started to run = the time it took to load
+  next();
+});
+
+// AGGREGATION MIDDLEWARE
+// middleware that runs before or after any aggregation happens on code
+tourSchema.pre('aggregate', function (next) {
+  this._pipeline.unshift({$match:{secretTour:{$ne: true}}});
+  // console.log(util.inspect(this._pipeline,false,null,true));
   next();
 });
 
