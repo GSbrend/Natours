@@ -142,3 +142,43 @@ exports.checkBody = (req, res, next) => {
 
 ================ DEBUGGING NODE.JS ===================
 
+======================================================
+
+================= ASYNC AWAIT ERRORHANDLING ===============
+// THIS WAY IS NOT THE BEST, 'CAUSE YOU NEED TO HANDLE THE ERROR INSIDE THE ASYNC FUNCTION, AND DOING IT EACH TIME MAKES IT BAD-LOOKING
+exports.createTour = async (req, res, next) => {
+  try {
+    const newTour = await Tour.create(req.body); // create a new instance in my collection
+    //for now, the req.body is set up on postman
+    res.status(201).json({
+      status: "success",
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err
+    });
+  }
+};
+
+//THIS IS THE BEST WAY, CREATE A FUNCTION TO CATCH THOSE ERRORS AND ENCAPSULATE THE FUNCTION IN IT
+//the best part is that I can use it in every async function
+module.exports = fn => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+};
+
+exports.createTour = catchAsync(async (req, res, next) => {
+    const newTour = await Tour.create(req.body); // create a new instance in my collection
+    //for now, the req.body is set up on postman
+    res.status(201).json({
+      status: "success",
+      data: {
+        tour: newTour,
+      },
+    })
+});
