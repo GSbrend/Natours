@@ -40,10 +40,11 @@ module.exports = (err, req, res, next) => { // when a middleware gets 4 paramete
   if(process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
+    console.log("Current environment:", process.env.NODE_ENV);
     // creating a new object so we dont modify the original one
-    let error = { ...err };
+    let error = { ...err, name: err.name};
     // DATABASE errors aren't naturally considered operational errors, but we of course need them to be, so this is how we do it
-    if (error.name === '"CastError"') error = handleCastErrorDB(error);
+    if (error.name === 'CastError') error = handleCastErrorDB(error);
     // handling invalid DB IDs
     // 1 - invalid id query (castError)
     // 2 - duplicate name
