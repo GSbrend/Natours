@@ -1,6 +1,7 @@
 const Tour = require("../models/tourModel.js"); //imports tour model
 const APIFeatures = require('../Utils/apiFeatures.js'); //imports apifeatures
 const catchAsync = require('./../Utils/catchAsync.js');
+const AppError = require('./../Utils/appError.js');
 
 exports.aliasTopTours = async (req, res, next) => {
   req.query.limit = '5';
@@ -32,6 +33,10 @@ exports.getTourById = catchAsync(
 async (req, res, next) => {
   const tour = await Tour.findById(req.params.id); // finds the data matching the id parameter on the URL
   // simplification of 'Tour.findOne({ _id: req.params.id })
+  if(!tour) {
+    return next(new AppError('No tour fount with that ID', 404)); //use return to strop the code in that line
+  }
+
   res.status(200).json({
     status: "sucess",
     data: {
@@ -58,6 +63,11 @@ async (req, res, next) => {
     new: true, //returns the new version of the instance
     runValidators: true, //runs the shcema validators once again after the data is updated
   });
+
+  if (!tour) {
+    return next(new AppError("No tour fount with that ID", 404)); //use return to strop the code in that line
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -68,7 +78,12 @@ async (req, res, next) => {
 
 exports.deleteTour = catchAsync(
 async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
+  const tour = await Tour.findByIdAndDelete(req.params.id);
+
+  if (!tour) {
+    return next(new AppError("No tour fount with that ID", 404)); //use return to strop the code in that line
+  }
+
   res.status(204).json({
     status: "success",
     data: null,
