@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 const slugify = require("slugify");
 const util = require("util");
 const validator = require("validator");
-const tourSchema = new mongoose.Schema(
-  {
+const tourSchema = new mongoose.Schema({
     // basic way to define a schema
     //name: String,
     // schema type options
