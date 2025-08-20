@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/GSbrend/NodejsStudies/tree/main#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.0.3",
     "express": "^4.21.2",
     "mongoose": "^8.17.0",
