@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const slugify = require("slugify");
+const bcrypt = require("bcryptjs");
+const catchAsync = require("../Utils/catchAsync");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -56,10 +58,13 @@ const userSchema = new mongoose.Schema({
 // MONGOOSE MIDDLEWARES
 
 //document middleware: runs before the .save() and .create()
-userSchema.pre("save", function (next) {
-  if(!this.isModified('password')) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
-  
+  this.password = await bcrypt.hash(this.password, 12);
+
+  this.passwordConfirm = undefined;
+  next();
 });
 
 // QUERY MIDDLEWARE
