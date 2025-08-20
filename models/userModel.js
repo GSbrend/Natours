@@ -19,26 +19,23 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please, enter an email"],
+    unique: true,
     trim: true,
-    validate: {
-      validator: function (val) {
-        return validator.isEmail(val);
-      },
-      message: "Please, enter a valid email",
-    },
+    lowercase: true,
+    validate: [validator.isEmail, "Please, enter a valid email"],
   },
   photo: {
     type: String,
     trim: true,
-    required: [true, "A user must have a photo"],
   },
   password: {
-    type: Number,
-    required: [true, "A password is necessary"]
+    type: String,
+    required: [true, "A password is necessary"],
+    validate: [validator.isStrongPassword, "A password must have 8 characters or more, a symbol, a number, a lowercase and an uppercase letter."]
   },
   passwordConfirm: {
-    type: Boolean,
-    default: false,
+    type: String,
+    required: [true, "Please, confirm your password"]
   },
   createdAt: {
     type: Date,
