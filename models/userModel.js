@@ -31,11 +31,20 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "A password is necessary"],
-    validate: [validator.isStrongPassword, "A password must have 8 characters or more, a symbol, a number, a lowercase and an uppercase letter."]
+    validate: [
+      validator.isStrongPassword,
+      "A password must have 8 characters or more, a symbol, a number, a lowercase and an uppercase letter.",
+    ],
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please, confirm your password"]
+    required: [true, "Please, confirm your password"],
+    validate: {
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: "The passwords are not the same!",
+    },
   },
   createdAt: {
     type: Date,
@@ -48,8 +57,9 @@ const userSchema = new mongoose.Schema({
 
 //document middleware: runs before the .save() and .create()
 userSchema.pre("save", function (next) {
-  this.slug = slugify(this.name, { lower: true });
-  next();
+  if(!this.isModified('password')) return next();
+
+  
 });
 
 // QUERY MIDDLEWARE
